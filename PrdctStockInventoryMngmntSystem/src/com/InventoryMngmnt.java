@@ -230,9 +230,10 @@ public class InventoryMngmnt {
 			String line;
 			while ((line = br.readLine()) != null) {
 				// System.out.println(line);
-				String[] pair = line.split(" ");
+				String [] pair=new String[20];				
+			 pair = line.split(" ");
 
-				if (pair[1].equals(name)) {
+				if (pair[1].equalsIgnoreCase(name)) {
 					int qty = Integer.parseInt(pair[2]);
 					int Qty = qty - newQty;
 					String Qty1 = String.valueOf(Qty);
