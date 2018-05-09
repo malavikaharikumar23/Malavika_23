@@ -2,15 +2,11 @@ package com;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -43,8 +39,9 @@ public class InventoryMngmnt {
 				System.out.println("stock details");
 				Display(fileName);
 				break;
-			case 3:Rating(fileName);
-			break;
+			case 3:
+				Rating(fileName);
+				break;
 			default:
 				System.out.println("Invalid choice");
 
@@ -55,7 +52,7 @@ public class InventoryMngmnt {
 			System.out.println("Select your Choice : 1.Add Items 2.Display Stock 3.Quality Rating");
 			int a = sc.nextInt();
 			String fileName = "C:\\Users\\user\\Desktop\\items.txt";
-			String fileName2="C:\\Users\\user\\Desktop\\rating.txt";
+			String fileName2 = "C:\\Users\\user\\Desktop\\rating.txt";
 			switch (a) {
 			case 1:
 				System.out.println("write details");
@@ -65,31 +62,31 @@ public class InventoryMngmnt {
 				System.out.println("stock details");
 				Display(fileName);
 				break;
-			case 3:viewRating(fileName2);
-			break;
-			
+			case 3:
+				viewRating(fileName2);
+				break;
+
 			default:
 				System.out.println("ok");
 
 			}
-			}
+		}
 
-		 else {
+		else {
 			System.out.println("invalid user");
 
 		}
 		sc.close();
 	}
 
-	private static void viewRating(String fileName) throws IOException{
-		
+	private static void viewRating(String fileName) throws IOException {
+
 		try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
 
 			String line;
 			while ((line = br.readLine()) != null) {
 				System.out.println(line);
 			}
-		
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -98,20 +95,19 @@ public class InventoryMngmnt {
 	}
 
 	private static void Rating(String fileName) {
-		String filename2="C:\\Users\\user\\Desktop\\rating.txt";
+		String filename2 = "C:\\Users\\user\\Desktop\\rating.txt";
 		System.out.println("Enter item whose rating is to submit");
-		Scanner sc=new Scanner(System.in);
-		String name=sc.next();
+		Scanner sc = new Scanner(System.in);
+		String name = sc.next();
 		System.out.println("enter rating");
-		String rating=sc.next();
+		String rating = sc.next();
 		try (BufferedWriter buffer = new BufferedWriter(new FileWriter(filename2, true))) {
-			buffer.write(name + "\t"+rating+"\n");
+			buffer.write(name + "\t" + rating + "\n");
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
+
 	}
 
 	private static int login(String username, String password, String loginFile) {
@@ -119,26 +115,23 @@ public class InventoryMngmnt {
 
 			String line;
 			while ((line = br.readLine()) != null) {
-				 //System.out.println(line);
+				// System.out.println(line);
 				String[] pair = line.split(" ");
 				if (pair[0].equals(username) && pair[1].equals(password)) {
-					if(pair[2].equalsIgnoreCase("user")) {
+					if (pair[2].equalsIgnoreCase("user")) {
 						return 1;
-					}
-					else {
+					} else {
 						return 2;
-			}
+					}
 				}
-		}
-			}catch (IOException e) {
+			}
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		return 0;
-		
-	}
 
-	
+	}
 
 	private static void writeToTextFile(String fileName) throws IOException {
 		// Files.write(Paths.get(fileName), content.getBytes(),
@@ -183,62 +176,52 @@ public class InventoryMngmnt {
 
 	private static String Display(String fileName) {
 		Scanner sc = new Scanner(System.in);
-		ArrayList<String> templist= new ArrayList<String>();
+		ArrayList<String> templist = new ArrayList<String>();
 		System.out.println("enter item you want to search");
 		String name = sc.nextLine();
 		System.out.println("enter quantity");
 		String quantity = sc.next();
-		int qty=Integer.parseInt(quantity);
+		int qty = Integer.parseInt(quantity);
 		try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
-		List<String> l=new ArrayList();
-		boolean flag1=false;
-		boolean flag2=false;
-		stream.forEach(s -> templist.add(s));
-		 for(String s:templist)
-		 {
-			 l=split(s);
-			 for(int i=0;i<l.size()-1;i++)
-			 {
-				
-				 System.out.println(l.size());
-				 if(l.get(i+1).equals(name) && Integer.parseInt(l.get(i + 2)) > 0) {
+			List<String> l = new ArrayList();
+			boolean flag1 = false;
+			boolean flag2 = false;
+			stream.forEach(s -> templist.add(s));
+			for (String s : templist) {
+				l = split(s);
+				for (int i = 0; i < l.size() - 1; i++) {
+
+					System.out.println(l.size());
+					if (l.get(i + 1).equals(name) && Integer.parseInt(l.get(i + 2)) > 0) {
 						flag1 = true;
 
-						if (l.get(i + 2).length() < 2 ) {
-	                        System.out.println("< alert on the screen>");
+						if (l.get(i + 2).length() < 2) {
+							System.out.println("< alert on the screen>");
 							JFrame f1 = new JFrame();
 							JOptionPane.showMessageDialog(f1,
-									"This product is running out of stock(less than 10 items left!!)",
-									"Alert", JOptionPane.WARNING_MESSAGE);
+									"This product is running out of stock(less than 10 items left!!)", "Alert",
+									JOptionPane.WARNING_MESSAGE);
+						} else {
+							flag2 = true;
 						}
-						else {
-							flag2=true;
-						}
-						
-		 
-	}
-           }
-			 }
-			 
-		 
-		 if(flag2==true)
-		 {
-			 order(name,quantity,fileName);
-		 }
-		 if(flag1==false)
-		 {
-			 System.out.println("item not in stock!");
-		 }
 
-	}catch (IOException e) {
-		e.printStackTrace();
-	}
+					}
+				}
+			}
+
+			if (flag2 == true) {
+				order(name, quantity, fileName);
+			}
+			if (flag1 == false) {
+				System.out.println("item not in stock!");
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		sc.close();
 		return null;
-		 }
-		
-		
-
+	}
 
 	private static void order(String name, String quantity, String fileName) throws IOException {
 		try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
@@ -270,10 +253,7 @@ public class InventoryMngmnt {
 
 	}
 
-	public static List<String> split(String str){
-	    return Stream.of(str.split(" "))
-	      .map (elem -> new String(elem))
-	      .collect(Collectors.toList());
+	public static List<String> split(String str) {
+		return Stream.of(str.split(" ")).map(elem -> new String(elem)).collect(Collectors.toList());
 	}
 }
-
